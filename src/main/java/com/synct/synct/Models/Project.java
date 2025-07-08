@@ -1,4 +1,4 @@
-package com.synct.synct;
+package com.synct.synct.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

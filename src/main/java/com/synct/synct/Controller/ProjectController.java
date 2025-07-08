@@ -1,6 +1,9 @@
-package com.synct.synct;
+package com.synct.synct.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import com.synct.synct.Models.Project;
+import com.synct.synct.Service.ProjectService;
 
 import java.util.ArrayList;
 import java.util.List;

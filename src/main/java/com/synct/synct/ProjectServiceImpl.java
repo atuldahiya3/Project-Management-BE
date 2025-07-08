@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.synct.synct.Models.Project;
+import com.synct.synct.Service.ProjectService;
+
 @Service
 public class ProjectServiceImpl implements ProjectService{
     List<Project> projects = new ArrayList<>();
