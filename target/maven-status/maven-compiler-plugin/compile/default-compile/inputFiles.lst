@@ -6,10 +6,10 @@
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/DTO/AuthResponse.java
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Models/Project.java
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Models/User.java
+/Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/ProjectManagementApplication.java
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/ProjectServiceImpl.java
-/Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Repository/ProjectManagementApplication.java
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Repository/UserRepository.java
-/Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Service/CustomUserDetailService.java
+/Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Service/CustomUserDetailsService.java
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Service/ProjectService.java
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Service/UserService.java
 /Users/atuldahiya/Downloads/Project-Management-BE/src/main/java/com/synct/synct/Util/JwtUtil.java
