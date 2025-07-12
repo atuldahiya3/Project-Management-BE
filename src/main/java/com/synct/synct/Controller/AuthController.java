@@ -51,11 +51,13 @@ public class AuthController {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .country(request.getCountry())
+                .phone(request.getPhone())
+                .name(request.getName())
                 .build();
 
         userRepository.save(newUser);
         User user= userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
-        UserResponse userResponse= new UserResponse(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
+        UserResponse userResponse= new UserResponse(user.getId(),user.getName(), user.getPhone(), user.getCountry(), user.getEmail(), user.getUsername(), user.getRole());
         RegisterResponse registerResponse= new RegisterResponse("User Registered Successfully", userResponse);
         return ResponseEntity.ok(registerResponse);
     }
@@ -70,7 +72,7 @@ public class AuthController {
                             request.getPassword()));
 
             String token = jwtUtil.generateToken(request.getUsername());
-            UserResponse userResponse= new UserResponse(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
+            UserResponse userResponse= new UserResponse(user.getId(),user.getName(), user.getPhone(), user.getCountry(), user.getEmail(), user.getUsername(), user.getRole());
             AuthResponse authResponse=new AuthResponse(token,userResponse);
             return ResponseEntity.ok(authResponse);
         } catch (BadCredentialsException ex) {
