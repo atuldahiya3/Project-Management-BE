@@ -60,7 +60,9 @@ public class AuthController {
                             request.getPassword()));
 
             String token = jwtUtil.generateToken(request.getUsername());
-            return ResponseEntity.ok(new AuthResponse(token));
+            User user= userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+            AuthResponse authResponse=new AuthResponse(token,user);
+            return ResponseEntity.ok(authResponse);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
