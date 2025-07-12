@@ -8,9 +8,9 @@ import lombok.Data;
 public class UserResponse {
     private long id;
     private String name;
-    private String username;
-    private String email;
     private String phone;
     private String country;
+    private String email;
+    private String username;
     private String role;
 }

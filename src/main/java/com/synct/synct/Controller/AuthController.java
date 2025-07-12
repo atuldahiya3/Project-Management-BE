@@ -45,6 +45,7 @@ public class AuthController {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
         }
+
         User newUser = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -56,9 +57,19 @@ public class AuthController {
                 .build();
 
         userRepository.save(newUser);
-        User user= userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
-        UserResponse userResponse= new UserResponse(user.getId(),user.getName(), user.getPhone(), user.getCountry(), user.getEmail(), user.getUsername(), user.getRole());
-        RegisterResponse registerResponse= new RegisterResponse("User Registered Successfully", userResponse);
+
+        // No need to re-fetch, just use the saved instance (newUser)
+        UserResponse userResponse = new UserResponse(
+                newUser.getId(),
+                newUser.getName(),
+                newUser.getPhone(),
+                newUser.getCountry(),
+                newUser.getEmail(),
+                newUser.getUsername(),
+                newUser.getRole()
+        );
+
+        RegisterResponse registerResponse = new RegisterResponse("User Registered Successfully", userResponse);
         return ResponseEntity.ok(registerResponse);
     }
 
