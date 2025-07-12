@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.synct.synct.DTO.AuthRequest;
 import com.synct.synct.DTO.AuthResponse;
+import com.synct.synct.DTO.RegisterResponse;
+import com.synct.synct.DTO.UserResponse;
 import com.synct.synct.Models.User;
 import com.synct.synct.Repository.UserRepository;
 import com.synct.synct.Util.JwtUtil;
@@ -36,32 +38,40 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> register(@RequestBody AuthRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
         }
-
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
+        }
         User newUser = User.builder()
                 .username(request.getUsername())
+                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role("ROLE_USER")
+                .role(request.getRole())
+                .country(request.getCountry())
                 .build();
 
         userRepository.save(newUser);
-        return ResponseEntity.ok("User registered successfully");
+        User user= userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        UserResponse userResponse= new UserResponse(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
+        RegisterResponse registerResponse= new RegisterResponse("User Registered Successfully", userResponse);
+        return ResponseEntity.ok(registerResponse);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
+            User user=userRepository.findByUsername(request.getLogin()).or(()->userRepository.findByEmail(request.getLogin())).orElseThrow(()->new RuntimeException("User not found"));
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
+                            user.getUsername(),
                             request.getPassword()));
 
             String token = jwtUtil.generateToken(request.getUsername());
-            User user= userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
-            AuthResponse authResponse=new AuthResponse(token,user);
+            UserResponse userResponse= new UserResponse(user.getId(), user.getEmail(), user.getUsername(), user.getRole());
+            AuthResponse authResponse=new AuthResponse(token,userResponse);
             return ResponseEntity.ok(authResponse);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");

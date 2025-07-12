@@ -1,13 +1,11 @@
 package com.synct.synct.DTO;
 
-import com.synct.synct.Models.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AuthResponse {
-    private String token;
+public class RegisterResponse {
+    private String message;
     private UserResponse user;
 }
