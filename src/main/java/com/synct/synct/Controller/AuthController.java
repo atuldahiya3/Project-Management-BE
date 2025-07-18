@@ -74,17 +74,39 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    public ResponseEntity login(@RequestBody AuthRequest request) {
         try {
-            User user=userRepository.findByUsername(request.getLogin()).or(()->userRepository.findByEmail(request.getLogin())).orElseThrow(()->new RuntimeException("User not found"));
+            System.out.println("=== Login Debug ===");
+            System.out.println("Login request: " + request.getLogin());
+            System.out.println("Username from request: " + request.getUsername());
+            
+            User user = userRepository.findByUsername(request.getLogin())
+                    .or(() -> userRepository.findByEmail(request.getLogin()))
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            
+            System.out.println("Found user: " + user.getUsername());
+            
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             user.getUsername(),
                             request.getPassword()));
-
-            String token = jwtUtil.generateToken(request.getUsername());
-            UserResponse userResponse= new UserResponse(user.getId(),user.getName(), user.getPhone(), user.getCountry(), user.getEmail(), user.getUsername(), user.getRole());
-            AuthResponse authResponse=new AuthResponse(token,userResponse);
+    
+            // Use user.getUsername() instead of request.getUsername()
+            String token = jwtUtil.generateToken(user.getUsername());
+            System.out.println("Generated token for user: " + user.getUsername());
+            System.out.println("Token: " + token);
+            
+            UserResponse userResponse = new UserResponse(
+                    user.getId(), 
+                    user.getName(), 
+                    user.getPhone(), 
+                    user.getCountry(), 
+                    user.getEmail(), 
+                    user.getUsername(), 
+                    user.getRole()
+            );
+            
+            AuthResponse authResponse = new AuthResponse(token, userResponse);
             return ResponseEntity.ok(authResponse);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
