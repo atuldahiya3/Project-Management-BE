@@ -12,4 +12,5 @@ public class AuthRequest {
     private String country;
     private String name;
     private String phone;
+    private Long companyId;
 }

@@ -18,7 +18,7 @@ import com.synct.synct.Repository.UserRepository;
 public class ProjectService {
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private ProjectRepository projectRepository; 
     @Autowired
     private UserRepository userRepository;
 
